@@ -50,13 +50,15 @@ public class ReentrantLockExample extends Application {
 
         stage.setScene(new Scene(root, width, height));
 
-        PricesContainer pricesContainer = new PricesContainer();
+        PricesContainer pricesContainer = new PricesContainer(); // shared by the UI and worker thread
         PriceUpdater priceUpdater = new PriceUpdater(pricesContainer);
 
-        AnimationTimer animationTimer = new AnimationTimer() {
+        AnimationTimer animationTimer = new AnimationTimer() { // when added to the UI thread, calls the handle callback on every frame that is shown to the user
             @Override
             public void handle(long l) {
-                if (pricesContainer.getLockObject().tryLock()) {
+                // if the UI thread shows 30fps, this handle method is going to be called 30 times per second
+                if (pricesContainer.getLockObject().tryLock()) { // using tryLock() we avoid blocking the real time thread and kept the application responsive
+                    // pricesContainer.getLockObject().lock(); // makes the UI unresponsive and laggy use, tryLock() here instead
                     try {
                         Label bitcoinLabel = cryptoLabels.get("BTC");
                         bitcoinLabel.setText(String.valueOf(pricesContainer.getBitcoinPrice()));
