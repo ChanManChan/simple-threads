@@ -1,5 +1,13 @@
 package datasharing;
 
+// Race Condition:-
+// 1> Condition when multiple threads are accessing a shared resource
+// 2> At least one thread is modifying the resource
+// 3> The timing of threads scheduling may cause incorrect results
+// 4> The core problem is non-atomic operations performed on the shared resource
+// Solution:-
+// 1> Identification of the critical section where the race condition is happening
+// 2> Protection of the critical section by a synchronized block
 public class RaceCondition {
     public static void main(String[] args) throws InterruptedException {
         InventoryCounter inventoryCounter = new InventoryCounter();
